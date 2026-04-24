@@ -58,34 +58,12 @@ SkinVerse leverages AI and image processing to:
 
 ---
 
-##  Project Structure
-
-
-SkinVerse/
-│
-├── client/ # React frontend
-│ ├── pages/
-│ ├── components/
-│ └── assets/
-│
-├── server/ # Backend APIs
-│ ├── routes/
-│ └── index.js
-│
-├── models/ # AI / ML logic
-├── utils/ # Helper functions
-├── supabaseClient.js
-└── README.md
-
 
 ---
 
 ##  Installation & Setup
 
 ### 1. Clone the repository
-
-
-git clone https://github.com/yourusername/skinverse.git
 cd skinverse
 2. Install dependencies
 Frontend
@@ -101,6 +79,7 @@ Create a .env file:
 SUPABASE_URL=your_url
 SUPABASE_KEY=your_key
 OPENAI_API_KEY=your_key
+
 4. Run the project
 Backend
 npm start
