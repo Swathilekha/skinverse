@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkinBot - Skinverse</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    :root {
+      --dusty-rose: #cc8b86;
+      --cream: #f9eae1;
+      --burgundy: #7d4f50;
+      --beige: #d1be9c;
+      --taupe: #aa998f;
+      --light-bg: #f9eae1;
+      --card-bg: #ffffff;
+      --text-dark: #3a2e2e;
+      --text-light: #7a6a6a;
+      --shadow-soft: 0 8px 30px rgba(125, 79, 80, 0.08);
+      --shadow-medium: 0 15px 35px rgba(125, 79, 80, 0.12);
+    }
+    
+    body { 
+      background-color: var(--light-bg); 
+      font-family: 'Poppins', sans-serif; 
+      line-height: 1.6;
+    }
+    
+    .navbar {
+      background-color: var(--burgundy);
+      box-shadow: 0 4px 20px rgba(125, 79, 80, 0.2);
+      padding: 1rem 0;
+      border-bottom: 2px solid var(--dusty-rose);
+    }
+
+    .navbar-brand {
+      color: white !important;
+      font-weight: 600;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.3s ease;
+    }
+
+    .navbar-brand:hover {
+      transform: translateY(-2px);
+    }
+
+    .chat-container {
+      max-width: 800px;
+      margin: 30px auto;
+      background-color: var(--card-bg);
+      border-radius: 20px;
+      padding: 0;
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      border: 1px solid rgba(209, 190, 156, 0.2);
+    }
+
+    .chat-header {
+      background-color: var(--burgundy);
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+      border-radius: 20px 20px 0 0;
+    }
+
+    .chat-box {
+      height: 500px;
+      overflow-y: auto;
+      padding: 1.5rem;
+      background-color: var(--cream);
+    }
+
+    .chat-msg {
+      margin: 1.25rem 0;
+      display: flex;
+      align-items: flex-start;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .chat-msg.user {
+      justify-content: flex-end;
+    }
+
+    .chat-msg .msg {
+      padding: 12px 18px;
+      border-radius: 18px;
+      max-width: 75%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      position: relative;
+    }
+
+    .chat-msg.user .msg {
+      background: linear-gradient(135deg, var(--dusty-rose) 0%, var(--burgundy) 100%);
+      color: white;
+      border-bottom-right-radius: 5px;
+    }
+
+    .chat-msg.bot .msg {
+      background-color: white;
+      color: var(--text-dark);
+      border: 1px solid rgba(209, 190, 156, 0.3);
+      border-bottom-left-radius: 5px;
+    }
+
+    .chat-input-container {
+      padding: 1.5rem;
+      background-color: white;
+      border-top: 1px solid rgba(209, 190, 156, 0.2);
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 10px;
+    }
+
+    .chat-input input {
+      flex: 1;
+      border-radius: 50px;
+      padding: 12px 20px;
+      border: 1.5px solid rgba(209, 190, 156, 0.3);
+      outline: none;
+      transition: all 0.3s;
+      font-size: 1rem;
+      background-color: var(--card-bg);
+    }
+
+    .chat-input input:focus {
+      border-color: var(--dusty-rose);
+      box-shadow: 0 0 0 0.2rem rgba(204, 139, 134, 0.15);
+    }
+
+    .chat-input button {
+      border-radius: 50px;
+      background-color: var(--dusty-rose);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-weight: 500;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chat-input button:hover {
+      background-color: var(--burgundy);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(125, 79, 80, 0.2);
+    }
+
+    /* Structured response styling */
+    .structured-response {
+      padding: 0;
+    }
+
+    .response-title {
+      font-weight: 600;
+      color: var(--burgundy);
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .alternatives-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .alternative-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.25rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border-left: 4px solid var(--dusty-rose);
+      transition: all 0.3s;
+    }
+
+    .alternative-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    }
+
+    .alternative-name {
+      font-weight: 600;
+      color: var(--burgundy);
+      margin-bottom: 0.5rem;
+      font-size: 1.05rem;
+    }
+
+    .alternative-benefits {
+      margin: 0;
+      padding-left: 1.2rem;
+    }
+
+    .alternative-benefits li {
+      margin-bottom: 0.4rem;
+      color: var(--text-dark);
+    }
+
+    .tip-box {
+      background: rgba(204, 139, 134, 0.05);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-top: 1.5rem;
+      border-left: 4px solid var(--beige);
+    }
+
+    .tip-title {
+      font-weight: 600;
+      color: var(--burgundy);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tip-content {
+      color: var(--text-dark);
+      margin: 0;
+    }
+
+    .suggestion-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .suggestion-chip {
+      background-color: rgba(204, 139, 134, 0.1);
+      color: var(--burgundy);
+      border: 1px solid rgba(204, 139, 134, 0.2);
+      border-radius: 50px;
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .suggestion-chip:hover {
+      background-color: rgba(204, 139, 134, 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* Scrollbar styling */
+    .chat-box::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .chat-box::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    .chat-box::-webkit-scrollbar-thumb {
+      background: var(--dusty-rose);
+      border-radius: 10px;
+    }
+
+    .chat-box::-webkit-scrollbar-thumb:hover {
+      background: var(--burgundy);
+    }
+
+    /* Bot typing indicator */
+    .typing-indicator {
+      display: flex;
+      align-items: center;
+      padding: 12px 18px;
+      background-color: white;
+      border-radius: 18px;
+      border-bottom-left-radius: 5px;
+      max-width: 120px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border: 1px solid rgba(209, 190, 156, 0.3);
+    }
+
+    .typing-dot {
+      height: 8px;
+      width: 8px;
+      border-radius: 50%;
+      background-color: var(--dusty-rose);
+      margin: 0 2px;
+      animation: typing 1.4s infinite ease-in-out;
+    }
+
+    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes typing {
+      0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .chat-container {
+        margin: 15px;
+      }
+      
+      .alternatives-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .chat-msg .msg {
+        max-width: 85%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a class="navbar-brand" href="dashboard.html">
+        <i class="bi bi-droplet" style="font-size: 1.5rem;"></i>
+        Skinverse
+      </a>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="mb-4">
+      <h1 class="page-title" style="color: var(--burgundy); font-weight: 600; font-size: 1.8rem;">
+        <i class="bi bi-robot me-2"></i>SkinBot Assistant
+      </h1>
+      <p class="page-subtitle" style="color: var(--text-light); font-size: 0.95rem;">
+        Ask me anything about skincare, ingredients, routines, or concerns.
+      </p>
+    </div>
+
+    <div class="chat-container">
+      <div class="chat-header">
+        <h4 class="mb-1"><i class="bi bi-robot me-2"></i>SkinBot Assistant</h4>
+        <p class="mb-0 opacity-75">Your personal skincare advisor</p>
+      </div>
+      
+      <div id="chatBox" class="chat-box">
+        <div class="chat-msg bot">
+          <div class="msg">
+            <p class="mb-2">Hello! I'm your SkinBot assistant. <i class="bi bi-chat-heart"></i></p>
+            <p class="mb-0">I can help with:</p>
+            <ul class="mb-0">
+              <li>Skincare ingredient alternatives</li>
+              <li>Routine recommendations</li>
+              <li>Skin concern analysis</li>
+              <li>Product suggestions</li>
+            </ul>
+            <div class="suggestion-chips mt-2">
+              <div class="suggestion-chip" onclick="setSuggestion('alternatives for salicylic acid')">Salicylic acid alternatives</div>
+              <div class="suggestion-chip" onclick="setSuggestion('best moisturizer for oily skin')">Moisturizer for oily skin</div>
+              <div class="suggestion-chip" onclick="setSuggestion('how to treat acne scars')">Treating acne scars</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="chat-input-container">
+        <div class="chat-input">
+          <input type="text" id="userInput" placeholder="Ask about skincare, ingredients, routines...">
+          <button onclick="sendMessage()">
+            <i class="bi bi-send"></i> Send
+          </button>
+        </div>
+        <div class="suggestion-chips mt-2">
+          <div class="suggestion-chip" onclick="setSuggestion('natural remedies for acne')">Natural acne remedies</div>
+          <div class="suggestion-chip" onclick="setSuggestion('sunscreen recommendations')">Sunscreen recs</div>
+          <div class="suggestion-chip" onclick="setSuggestion('anti-aging ingredients')">Anti-aging ingredients</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const chatBox = document.getElementById('chatBox');
+    const userInput = document.getElementById('userInput');
+    
+    // Function to format structured responses from the API
+    function formatStructuredResponse(data) {
+      // Check if this is an alternatives response
+      if (data.message && data.message.toLowerCase().includes('alternatives') && 
+          (data.message.toLowerCase().includes('salicylic') || data.reply.toLowerCase().includes('salicylic'))) {
+        
+        return `
+          <div class="structured-response">
+            <div class="response-title">
+              <i class="bi bi-lightbulb"></i> Alternatives to Salicylic Acid
+            </div>
+            <div class="alternatives-grid">
+              <div class="alternative-card">
+                <div class="alternative-name">Benzoyl Peroxide</div>
+                <ul class="alternative-benefits">
+                  <li>Kills acne-causing bacteria</li>
+                  <li>Reduces inflammation</li>
+                  <li>Available over-the-counter</li>
+                </ul>
+              </div>
+              <div class="alternative-card">
+                <div class="alternative-name">Glycolic Acid</div>
+                <ul class="alternative-benefits">
+                  <li>Alpha hydroxy acid (AHA)</li>
+                  <li>Exfoliates skin surface</li>
+                  <li>Unclogs pores effectively</li>
+                </ul>
+              </div>
+              <div class="alternative-card">
+                <div class="alternative-name">Lactic Acid</div>
+                <ul class="alternative-benefits">
+                  <li>Gentler AHA alternative</li>
+                  <li>Hydrates while exfoliating</li>
+                  <li>Good for sensitive skin</li>
+                </ul>
+              </div>
+              <div class="alternative-card">
+                <div class="alternative-name">Tea Tree Oil</div>
+                <ul class="alternative-benefits">
+                  <li>Natural antibacterial properties</li>
+                  <li>Reduces inflammation</li>
+                  <li>Antifungal benefits</li>
+                </ul>
+              </div>
+              <div class="alternative-card">
+                <div class="alternative-name">Niacinamide</div>
+                <ul class="alternative-benefits">
+                  <li>Reduces redness and inflammation</li>
+                  <li>Regulates oil production</li>
+                  <li>Strengthens skin barrier</li>
+                </ul>
+              </div>
+              <div class="alternative-card">
+                <div class="alternative-name">Retinoids</div>
+                <ul class="alternative-benefits">
+                  <li>Promotes cell turnover</li>
+                  <li>Prevents clogged pores</li>
+                  <li>Anti-aging benefits</li>
+                </ul>
+              </div>
+            </div>
+            <div class="tip-box">
+              <div class="tip-title">
+                <i class="bi bi-info-circle"></i> Important Reminder
+              </div>
+              <p class="tip-content">
+                Always patch test new products and consult with a dermatologist for personalized advice based on your skin type and concerns.
+              </p>
+            </div>
+          </div>
+        `;
+      }
+      
+      // Default formatting for other responses
+      return data.reply || "I'm not sure how to help with that. Try asking about skincare ingredients, routines, or common skin concerns.";
+    }
+    
+    function appendMessage(msg, sender = 'bot') {
+      const div = document.createElement('div');
+      div.classList.add('chat-msg', sender);
+      
+      if (sender === 'bot' && typeof msg === 'object') {
+        // If it's a structured response object
+        div.innerHTML = `<div class="msg">${formatStructuredResponse(msg)}</div>`;
+      } else {
+        // Regular text message
+        div.innerHTML = `<div class="msg">${msg}</div>`;
+      }
+      
+      chatBox.appendChild(div);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+    
+    function showTypingIndicator() {
+      const div = document.createElement('div');
+      div.classList.add('chat-msg', 'bot');
+      div.id = 'typingIndicator';
+      div.innerHTML = `
+        <div class="typing-indicator">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+      `;
+      chatBox.appendChild(div);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+    
+    function hideTypingIndicator() {
+      const indicator = document.getElementById('typingIndicator');
+      if (indicator) {
+        indicator.remove();
+      }
+    }
+    
+    function setSuggestion(text) {
+      userInput.value = text;
+      userInput.focus();
+    }
+    
+    async function sendMessage() {
+      const text = userInput.value.trim();
+      if (!text) return;
+      
+      appendMessage(text, 'user');
+      userInput.value = '';
+      
+      showTypingIndicator();
+      
+      // Call backend API
+      try {
+        const response = await fetch('/api/skinbot_query', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({message: text})
+        });
+         
+        const data = await response.json();
+        hideTypingIndicator();
+        appendMessage(data, 'bot');
+      } catch (err) {
+        hideTypingIndicator();
+        appendMessage("Error: Could not reach server.", 'bot');
+      }
+    }
+    
+    userInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') sendMessage();
+    });
+    
+    // Focus the input on page load
+    window.onload = function() {
+      userInput.focus();
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skin Routine - Skinverse</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    :root {
+      --dusty-rose: #cc8b86;
+      --cream: #f9eae1;
+      --burgundy: #7d4f50;
+      --beige: #d1be9c;
+      --taupe: #aa998f;
+      --light-bg: #f9eae1;
+      --card-bg: #ffffff;
+      --text-dark: #3a2e2e;
+      --text-light: #7a6a6a;
+      --shadow-soft: 0 8px 30px rgba(125, 79, 80, 0.08);
+      --shadow-medium: 0 15px 35px rgba(125, 79, 80, 0.12);
+    }
+    
+    body { 
+      background-color: var(--light-bg); 
+      font-family: 'Poppins', sans-serif; 
+      line-height: 1.6;
+    }
+    
+    .navbar {
+      background-color: var(--burgundy);
+      box-shadow: 0 4px 20px rgba(125, 79, 80, 0.2);
+      padding: 1rem 0;
+      border-bottom: 2px solid var(--dusty-rose);
+    }
+
+    .navbar-brand {
+      color: white !important;
+      font-weight: 600;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.3s ease;
+    }
+
+    .navbar-brand:hover {
+      transform: translateY(-2px);
+    }
+
+    .main-container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 0 15px;
+    }
+
+    .page-title {
+      color: var(--burgundy);
+      font-weight: 600;
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-subtitle {
+      color: var(--text-light);
+      font-size: 0.95rem;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(209, 190, 156, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-medium);
+    }
+
+    .skin-type-selector {
+      margin-bottom: 2rem;
+    }
+
+    .section-label {
+      color: var(--burgundy);
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .skin-type-select {
+      width: 100%;
+      border-radius: 12px;
+      padding: 12px 20px;
+      border: 1.5px solid rgba(209, 190, 156, 0.3);
+      background-color: var(--card-bg);
+      color: var(--text-dark);
+      font-size: 0.95rem;
+      transition: all 0.3s;
+    }
+
+    .skin-type-select:focus {
+      border-color: var(--dusty-rose);
+      box-shadow: 0 0 0 0.2rem rgba(204, 139, 134, 0.15);
+    }
+
+    .generate-btn {
+      border-radius: 50px;
+      background-color: var(--dusty-rose);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-weight: 500;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 1.5rem auto;
+    }
+
+    .generate-btn:hover {
+      background-color: var(--burgundy);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(125, 79, 80, 0.2);
+    }
+
+    .routine-container {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .routine-header {
+      border-bottom: 2px solid var(--beige);
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .routine-title {
+      color: var(--burgundy);
+      font-weight: 600;
+      font-size: 1.4rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .routine-subtitle {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    .routine-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .routine-card {
+      background: rgba(204, 139, 134, 0.05);
+      border-radius: 16px;
+      padding: 1.5rem;
+      border-left: 4px solid var(--dusty-rose);
+      transition: all 0.3s;
+    }
+
+    .routine-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      background: rgba(204, 139, 134, 0.08);
+    }
+
+    .routine-time {
+      font-weight: 600;
+      color: var(--burgundy);
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .routine-steps {
+      margin: 0;
+      padding-left: 0;
+    }
+
+    .routine-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(209, 190, 156, 0.2);
+    }
+
+    .routine-step:last-child {
+      border-bottom: none;
+    }
+
+    .step-number {
+      background: var(--dusty-rose);
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .step-content {
+      flex: 1;
+    }
+
+    .step-title {
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 0.25rem;
+      font-size: 0.95rem;
+    }
+
+    .step-description {
+      color: var(--text-light);
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    /* Additional Features */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .feature-item {
+      background: rgba(204, 139, 134, 0.05);
+      border-radius: 12px;
+      padding: 1.25rem;
+      text-align: center;
+      transition: all 0.3s;
+      border: 1px solid rgba(209, 190, 156, 0.1);
+    }
+
+    .feature-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      color: var(--dusty-rose);
+      margin-bottom: 0.75rem;
+    }
+
+    .feature-name {
+      font-weight: 600;
+      color: var(--burgundy);
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .feature-desc {
+      color: var(--text-light);
+      font-size: 0.8rem;
+    }
+
+    .tip-box {
+      background: rgba(204, 139, 134, 0.05);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      border-left: 4px solid var(--beige);
+    }
+
+    .tip-title {
+      font-weight: 600;
+      color: var(--burgundy);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1rem;
+    }
+
+    .tip-content {
+      color: var(--text-dark);
+      margin: 0;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* Skin Type Indicators */
+    .skin-type-indicators {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+    }
+
+    .skin-type-indicator {
+      background: rgba(204, 139, 134, 0.1);
+      color: var(--burgundy);
+      border: 1px solid rgba(204, 139, 134, 0.2);
+      border-radius: 50px;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .skin-type-indicator:hover {
+      background: rgba(204, 139, 134, 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .main-container {
+        margin: 15px auto;
+      }
+      
+      .feature-card {
+        padding: 1.5rem;
+      }
+      
+      .routine-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a class="navbar-brand" href="dashboard.html">
+        <i class="bi bi-droplet" style="font-size: 1.5rem;"></i>
+        Skinverse
+      </a>
+    </div>
+  </nav>
+
+  <div class="main-container">
+    <div class="mb-4">
+      <h1 class="page-title">
+        <i class="bi bi-list-check me-2"></i>Personalized Skin Routine
+      </h1>
+      <p class="page-subtitle">Get customized morning and evening routines tailored to your skin type</p>
+    </div>
+
+    <div class="feature-card">
+      <!-- Skin Type Selection -->
+      <div class="skin-type-selector">
+        <div class="section-label">
+          <i class="bi bi-person-circle"></i> Select Your Skin Type
+        </div>
+        <select id="skinTypeSelect" class="skin-type-select">
+          <option value="">-- Choose your skin type --</option>
+          <option value="oily">Oily Skin</option>
+          <option value="dry">Dry Skin</option>
+          <option value="combination">Combination Skin</option>
+          <option value="sensitive">Sensitive Skin</option>
+          <option value="normal">Normal Skin</option>
+        </select>
+
+        <!-- Quick Skin Type Indicators -->
+        <div class="skin-type-indicators">
+          <div class="skin-type-indicator" onclick="setSkinType('oily')">Oily</div>
+          <div class="skin-type-indicator" onclick="setSkinType('dry')">Dry</div>
+          <div class="skin-type-indicator" onclick="setSkinType('combination')">Combination</div>
+          <div class="skin-type-indicator" onclick="setSkinType('sensitive')">Sensitive</div>
+          <div class="skin-type-indicator" onclick="setSkinType('normal')">Normal</div>
+        </div>
+
+        <button class="generate-btn" onclick="showRoutine()">
+          <i class="bi bi-magic"></i> Generate Routine
+        </button>
+      </div>
+
+      <!-- Routine Display -->
+      <div id="routineContainer" class="routine-container">
+        <div class="routine-header">
+          <h3 class="routine-title"><i class="bi bi-stars"></i> Your Personalized Routine</h3>
+          <p class="routine-subtitle">Follow this routine consistently for best results</p>
+        </div>
+
+        <div class="routine-grid">
+          <!-- Morning Routine -->
+          <div class="routine-card">
+            <div class="routine-time">
+              <i class="bi bi-sun"></i> Morning Routine
+            </div>
+            <ul class="routine-steps" id="morningRoutine"></ul>
+          </div>
+
+          <!-- Evening Routine -->
+          <div class="routine-card">
+            <div class="routine-time">
+              <i class="bi bi-moon"></i> Evening Routine
+            </div>
+            <ul class="routine-steps" id="eveningRoutine"></ul>
+          </div>
+        </div>
+
+        <!-- Additional Features -->
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="bi bi-clock"></i>
+            </div>
+            <div class="feature-name">Time Estimate</div>
+            <div class="feature-desc">5-10 minutes per routine</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="bi bi-shield-check"></i>
+            </div>
+            <div class="feature-name">Dermatologist Approved</div>
+            <div class="feature-desc">Safe for daily use</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="bi bi-arrow-repeat"></i>
+            </div>
+            <div class="feature-name">Consistency</div>
+            <div class="feature-desc">Results in 4-6 weeks</div>
+          </div>
+        </div>
+
+        <!-- Tips Box -->
+        <div class="tip-box">
+          <div class="tip-title">
+            <i class="bi bi-lightbulb"></i> Pro Tips
+          </div>
+          <p class="tip-content">
+            • Always patch test new products before full application<br>
+            • Be consistent with your routine for best results<br>
+            • Adjust products based on seasonal changes<br>
+            • Stay hydrated and maintain a healthy diet<br>
+            • Consult a dermatologist for persistent concerns
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const routines = {
+      oily: {
+        morning: [
+          { title: "Gentle Foaming Cleanser", desc: "Remove excess oil without stripping" },
+          { title: "Oil-Control Toner", desc: "Balance pH and control shine" },
+          { title: "Niacinamide Serum", desc: "Regulate sebum production" },
+          { title: "Lightweight Moisturizer", desc: "Oil-free, non-comedogenic formula" },
+          { title: "Matte Finish SPF 30+", desc: "Protect without adding shine" }
+        ],
+        evening: [
+          { title: "Oil-Control Cleanser", desc: "Deep clean pores thoroughly" },
+          { title: "Salicylic Acid Exfoliant", desc: "2-3 times weekly for pores" },
+          { title: "Retinol Serum", desc: "Start with low concentration" },
+          { title: "Gel-Based Moisturizer", desc: "Lightweight overnight hydration" }
+        ]
+      },
+      dry: {
+        morning: [
+          { title: "Hydrating Cream Cleanser", desc: "Gentle cleanse without drying" },
+          { title: "Alcohol-Free Toner", desc: "Soothing and hydrating" },
+          { title: "Hyaluronic Acid Serum", desc: "Intense moisture retention" },
+          { title: "Rich Cream Moisturizer", desc: "Nourish and protect barrier" },
+          { title: "Hydrating SPF 30+", desc: "Sun protection with moisture" }
+        ],
+        evening: [
+          { title: "Gentle Cream Cleanser", desc: "Remove impurities gently" },
+          { title: "Hydrating Serum", desc: "Overnight moisture boost" },
+          { title: "Thick Cream or Sleeping Mask", desc: "Intensive overnight repair" }
+        ]
+      },
+      combination: {
+        morning: [
+          { title: "Balanced Foaming Cleanser", desc: "Clean without over-drying" },
+          { title: "Alcohol-Free Toner", desc: "Balance different zones" },
+          { title: "Vitamin C Serum", desc: "Brighten and protect" },
+          { title: "Light Lotion Moisturizer", desc: "Even hydration" },
+          { title: "Broad Spectrum SPF 30+", desc: "Overall protection" }
+        ],
+        evening: [
+          { title: "Gentle Cleanser", desc: "Prepare skin for treatment" },
+          { title: "Weekly Exfoliation", desc: "1-2 times weekly as needed" },
+          { title: "Targeted Treatment", desc: "Different products for T-zone and cheeks" },
+          { title: "Lightweight Cream", desc: "Balance overnight care" }
+        ]
+      },
+      sensitive: {
+        morning: [
+          { title: "Soothing Cleanser", desc: "Fragrance-free and gentle" },
+          { title: "Calming Toner", desc: "Reduce redness and irritation" },
+          { title: "Aloe Vera Serum", desc: "Soothe and protect" },
+          { title: "Hypoallergenic Cream", desc: "Minimal ingredient formula" },
+          { title: "Mineral SPF 30+", desc: "Gentle physical protection" }
+        ],
+        evening: [
+          { title: "Non-Foaming Cleanser", desc: "Ultra-gentle cleansing" },
+          { title: "Repairing Serum", desc: "Strengthen skin barrier" },
+          { title: "Soothing Night Cream", desc: "Calm and restore overnight" }
+        ]
+      },
+      normal: {
+        morning: [
+          { title: "Gentle Cleanser", desc: "Maintain natural balance" },
+          { title: "Light Toner", desc: "Refresh and prepare" },
+          { title: "Antioxidant Serum", desc: "Protect from environmental damage" },
+          { title: "Regular Cream", desc: "Maintain hydration" },
+          { title: "SPF 30+", desc: "Essential daily protection" }
+        ],
+        evening: [
+          { title: "Gentle Cleanser", desc: "Remove daily buildup" },
+          { title: "Repairing Serum", desc: "Support overnight renewal" },
+          { title: "Regular Night Cream", desc: "Maintain skin health" }
+        ]
+      }
+    };
+
+    function setSkinType(type) {
+      document.getElementById('skinTypeSelect').value = type;
+    }
+
+    function showRoutine() {
+      const skinType = document.getElementById('skinTypeSelect').value;
+      const routineContainer = document.getElementById('routineContainer');
+      const morningRoutine = document.getElementById('morningRoutine');
+      const eveningRoutine = document.getElementById('eveningRoutine');
+
+      if (!skinType) {
+        routineContainer.style.display = 'none';
+        return;
+      }
+
+      const routine = routines[skinType];
+      
+      // Populate morning routine
+      morningRoutine.innerHTML = routine.morning.map((step, index) => `
+        <li class="routine-step">
+          <div class="step-number">${index + 1}</div>
+          <div class="step-content">
+            <div class="step-title">${step.title}</div>
+            <div class="step-description">${step.desc}</div>
+          </div>
+        </li>
+      `).join('');
+
+      // Populate evening routine
+      eveningRoutine.innerHTML = routine.evening.map((step, index) => `
+        <li class="routine-step">
+          <div class="step-number">${index + 1}</div>
+          <div class="step-content">
+            <div class="step-title">${step.title}</div>
+            <div class="step-description">${step.desc}</div>
+          </div>
+        </li>
+      `).join('');
+
+      routineContainer.style.display = 'block';
+    }
+
+    // Add keyboard support
+    document.getElementById('skinTypeSelect').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') showRoutine();
+    });
+  </script>
+</body>
+</html>

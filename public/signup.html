@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skinverse - Sign Up</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    :root {
+      --dusty-rose: #cc8b86;
+      --cream: #f9eae1;
+      --burgundy: #7d4f50;
+      --beige: #d1be9c;
+      --taupe: #aa998f;
+      --light-bg: #f9eae1;
+      --card-bg: #ffffff;
+      --text-dark: #3a2e2e;
+      --text-light: #7a6a6a;
+    }
+    
+    body {
+      background-color: var(--light-bg);
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* Large Background Icons */
+    .bg-icon {
+      position: fixed;
+      z-index: 0;
+      opacity: 0.04;
+      color: var(--dusty-rose);
+      font-size: 10rem;
+    }
+    
+    .bg-icon-1 {
+      top: 15%;
+      left: 8%;
+    }
+    
+    .bg-icon-2 {
+      top: 20%;
+      right: 10%;
+    }
+    
+    .bg-icon-3 {
+      bottom: 25%;
+      left: 12%;
+    }
+    
+    .bg-icon-4 {
+      bottom: 20%;
+      right: 8%;
+    }
+
+    .signup-container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+
+    .signup-card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(125, 79, 80, 0.08);
+      padding: 2.5rem 2rem;
+      border: 1px solid rgba(209, 190, 156, 0.2);
+      width: 100%;
+    }
+
+    .brand-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .brand-icon {
+      font-size: 2.5rem;
+      color: var(--burgundy);
+      margin-bottom: 1rem;
+    }
+
+    .brand-title {
+      color: var(--burgundy);
+      font-weight: 600;
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .brand-subtitle {
+      color: var(--text-light);
+      font-size: 0.95rem;
+    }
+
+    .form-label {
+      font-weight: 500;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .form-control {
+      border: 1.5px solid rgba(209, 190, 156, 0.3);
+      border-radius: 8px;
+      padding: 10px 15px;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      background-color: var(--card-bg);
+    }
+
+    .form-control:focus {
+      border-color: var(--dusty-rose);
+      box-shadow: 0 0 0 0.1rem rgba(204, 139, 134, 0.1);
+    }
+
+    .input-group {
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--taupe);
+      font-size: 1rem;
+    }
+
+    .btn-signup {
+      background-color: var(--dusty-rose);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .btn-signup:hover {
+      background-color: var(--burgundy);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(125, 79, 80, 0.2);
+    }
+
+    .login-link {
+      text-align: center;
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-top: 1.5rem;
+    }
+
+    .login-link a {
+      color: var(--burgundy);
+      font-weight: 500;
+      transition: color 0.3s ease;
+      text-decoration: none;
+    }
+
+    .login-link a:hover {
+      color: var(--dusty-rose);
+    }
+
+    @media (max-width: 576px) {
+      .signup-card {
+        padding: 2rem 1.5rem;
+      }
+      
+      .bg-icon {
+        display: none;
+      }
+      
+      .brand-title {
+        font-size: 1.6rem;
+      }
+    }
+
+    /* Professional subtle pattern */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(circle at 15% 50%, rgba(204, 139, 134, 0.02) 0%, transparent 50%),
+        radial-gradient(circle at 85% 30%, rgba(125, 79, 80, 0.02) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Large Background Icons -->
+  <div class="bg-icon bg-icon-1">
+    <i class="bi bi-droplet"></i>
+  </div>
+  <div class="bg-icon bg-icon-2">
+    <i class="bi bi-flower1"></i>
+  </div>
+  <div class="bg-icon bg-icon-3">
+    <i class="bi bi-moisture"></i>
+  </div>
+  <div class="bg-icon bg-icon-4">
+    <i class="bi bi-heart"></i>
+  </div>
+
+  <div class="signup-container">
+    <div class="signup-card">
+      <div class="brand-header">
+        <div class="brand-icon">
+          <i class="bi bi-droplet"></i>
+        </div>
+        <h1 class="brand-title">Skinverse</h1>
+        <p class="brand-subtitle">Start your journey to beautiful skin</p>
+      </div>
+      
+      <form action="/signup" method="POST">
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <div class="input-group">
+            <input type="text" name="username" class="form-control" placeholder="Enter your username" required>
+            <span class="input-icon"><i class="bi bi-person"></i></span>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <div class="input-group">
+            <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+            <span class="input-icon"><i class="bi bi-envelope"></i></span>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <div class="input-group">
+            <input type="password" name="password" class="form-control" placeholder="Create a password" required>
+            <span class="input-icon"><i class="bi bi-lock"></i></span>
+          </div>
+        </div>
+        <button class="btn btn-signup mt-3">Create Account</button>
+        <p class="login-link">Already have an account? <a href="/login">Sign In</a></p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Add subtle animation to form elements on load
+    document.addEventListener('DOMContentLoaded', function() {
+      const formElements = document.querySelectorAll('.form-control, .btn-signup');
+      
+      formElements.forEach((element, index) => {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(10px)';
+        
+        setTimeout(() => {
+          element.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+          element.style.opacity = '1';
+          element.style.transform = 'translateY(0)';
+        }, 100 * index);
+      });
+    });
+  </script>
+</body>
+</html>

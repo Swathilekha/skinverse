@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Know Your Skin - Skinverse</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    :root {
+      --dusty-rose: #cc8b86;
+      --cream: #f9eae1;
+      --burgundy: #7d4f50;
+      --beige: #d1be9c;
+      --taupe: #aa998f;
+      --light-bg: #f9eae1;
+      --card-bg: #ffffff;
+      --text-dark: #3a2e2e;
+      --text-light: #7a6a6a;
+    }
+    
+    body { 
+      background-color: var(--light-bg); 
+      font-family: 'Poppins', sans-serif; 
+      line-height: 1.6;
+    }
+    
+    .navbar {
+      background-color: var(--burgundy);
+      box-shadow: 0 2px 15px rgba(125, 79, 80, 0.15);
+      padding: 1rem 0;
+      border-bottom: 2px solid var(--dusty-rose);
+    }
+
+    .navbar-brand {
+      color: white !important;
+      font-weight: 600;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card { 
+      border: none;
+      border-radius: 12px; 
+      box-shadow: 0 4px 20px rgba(125, 79, 80, 0.08); 
+      background-color: var(--card-bg);
+      border: 1px solid rgba(209, 190, 156, 0.2);
+      height: 100%;
+    }
+    
+    .btn-primary { 
+      background-color: var(--dusty-rose); 
+      color: white; 
+      border: none; 
+      border-radius: 8px; 
+      padding: 10px 20px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover { 
+      background-color: var(--burgundy);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(125, 79, 80, 0.2);
+    }
+    
+    .result-box { 
+      background: var(--card-bg); 
+      padding: 1.5rem; 
+      border-radius: 12px; 
+      display: none;
+      border: 1px solid rgba(209, 190, 156, 0.3);
+      box-shadow: 0 4px 20px rgba(125, 79, 80, 0.08);
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    .page-title {
+      color: var(--burgundy);
+      font-weight: 600;
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-subtitle {
+      color: var(--text-light);
+      font-size: 0.95rem;
+    }
+
+    .form-control {
+      border: 1.5px solid rgba(209, 190, 156, 0.3);
+      border-radius: 8px;
+      padding: 10px 15px;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      background-color: var(--card-bg);
+    }
+
+    .form-control:focus {
+      border-color: var(--dusty-rose);
+      box-shadow: 0 0 0 0.1rem rgba(204, 139, 134, 0.1);
+    }
+
+    .form-label {
+      font-weight: 500;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .btn-outline-secondary {
+      border-color: var(--taupe);
+      color: var(--text-light);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+    }
+
+    .btn-outline-secondary:hover {
+      background-color: var(--dusty-rose);
+      border-color: var(--dusty-rose);
+      color: white;
+    }
+
+    /* Enhanced File Upload Styling */
+    .upload-container {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .upload-area {
+      border: 2px dashed rgba(204, 139, 134, 0.3);
+      border-radius: 12px;
+      padding: 2rem;
+      background: rgba(204, 139, 134, 0.05);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      margin-bottom: 1rem;
+    }
+
+    .upload-area:hover {
+      border-color: var(--dusty-rose);
+      background: rgba(204, 139, 134, 0.08);
+    }
+
+    .upload-area.dragover {
+      border-color: var(--dusty-rose);
+      background: rgba(204, 139, 134, 0.1);
+    }
+
+    .upload-icon {
+      font-size: 3rem;
+      color: var(--dusty-rose);
+      margin-bottom: 1rem;
+    }
+
+    .upload-text {
+      color: var(--text-dark);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .upload-subtext {
+      color: var(--text-light);
+      font-size: 0.85rem;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .preview-container {
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    .preview-image {
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      display: none;
+    }
+
+    .camera-options {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .camera-btn {
+      flex: 1;
+      background: var(--card-bg);
+      border: 2px solid rgba(209, 190, 156, 0.3);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .camera-btn:hover {
+      border-color: var(--dusty-rose);
+      background: rgba(204, 139, 134, 0.05);
+    }
+
+    .camera-btn.active {
+      border-color: var(--dusty-rose);
+      background: rgba(204, 139, 134, 0.1);
+    }
+
+    .camera-icon {
+      font-size: 1.5rem;
+      color: var(--dusty-rose);
+      margin-bottom: 0.5rem;
+    }
+
+    .camera-label {
+      color: var(--text-dark);
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    /* Camera Container Styling */
+    .camera-container {
+      margin-bottom: 1rem;
+      text-align: center;
+      display: none;
+    }
+
+    .camera-preview {
+      width: 100%;
+      max-height: 300px;
+      border-radius: 8px;
+      background: #000;
+    }
+
+    .camera-controls {
+      margin-top: 1rem;
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+
+    /* Enhanced Result Styling - More Compact */
+    .result-header {
+      border-bottom: 2px solid var(--beige);
+      padding-bottom: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .analysis-section {
+      margin-bottom: 1rem;
+      padding: 1rem;
+      background: rgba(204, 139, 134, 0.05);
+      border-radius: 8px;
+      border-left: 3px solid var(--dusty-rose);
+    }
+
+    .analysis-section h6 {
+      color: var(--burgundy);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .analysis-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid rgba(209, 190, 156, 0.2);
+    }
+
+    .analysis-item:last-child {
+      border-bottom: none;
+    }
+
+    .analysis-label {
+      color: var(--text-dark);
+      font-weight: 500;
+      font-size: 0.85rem;
+    }
+
+    .analysis-value {
+      color: var(--burgundy);
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .confidence-badge {
+      background: var(--beige);
+      color: var(--text-dark);
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .image-preview-container {
+      text-align: center;
+      margin: 1rem 0;
+      padding: 0.75rem;
+      background: rgba(204, 139, 134, 0.05);
+      border-radius: 8px;
+    }
+
+    .image-preview {
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .explanation-box {
+      background: rgba(204, 139, 134, 0.05);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 0.75rem;
+      border-left: 3px solid var(--beige);
+    }
+
+    .explanation-box h6 {
+      color: var(--burgundy);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .explanation-box p {
+      margin: 0;
+      color: var(--text-dark);
+      line-height: 1.5;
+      font-size: 0.85rem;
+    }
+
+    .healing-timeline {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin: 0.75rem 0;
+    }
+
+    .healing-item {
+      flex: 1;
+      text-align: center;
+      padding: 0.75rem;
+      background: rgba(204, 139, 134, 0.08);
+      border-radius: 6px;
+    }
+
+    .healing-days {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--burgundy);
+      margin-bottom: 0.2rem;
+    }
+
+    .healing-label {
+      font-size: 0.75rem;
+      color: var(--text-light);
+    }
+
+    /* Compact layout for better space usage */
+    .compact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin: 0.75rem 0;
+    }
+
+    .compact-item {
+      background: rgba(204, 139, 134, 0.05);
+      padding: 0.75rem;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    .compact-value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--burgundy);
+      margin-bottom: 0.2rem;
+    }
+
+    .compact-label {
+      font-size: 0.75rem;
+      color: var(--text-light);
+    }
+
+    /* Equal height columns */
+    .equal-height-row {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    
+    .equal-height-row > [class*='col-'] {
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a class="navbar-brand" href="dashboard.html">
+        <i class="bi bi-droplet" style="font-size: 1.5rem;"></i>
+        Skinverse
+      </a>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="mb-4">
+      <h1 class="page-title">
+        <i class="bi bi-flower1 me-2"></i>Know Your Skin
+      </h1>
+      <p class="page-subtitle">Upload a selfie or take a photo — we'll analyze your skin type and acne level.</p>
+    </div>
+
+    <div class="row mt-4 equal-height-row">
+      <div class="col-md-6">
+        <div class="card p-4">
+          <h5 class="mb-3" style="color: var(--burgundy);">
+            <i class="bi bi-camera me-2"></i>Upload or Take a Photo
+          </h5>
+          <p class="text-muted mb-3">Use front camera for face. Allowed formats: jpg, png.</p>
+
+          <form id="photoForm">
+            <!-- Camera Options -->
+            <div class="camera-options">
+              <div class="camera-btn active" id="uploadOption">
+                <div class="camera-icon">
+                  <i class="bi bi-upload"></i>
+                </div>
+                <div class="camera-label">Upload File</div>
+              </div>
+              <div class="camera-btn" id="cameraOption">
+                <div class="camera-icon">
+                  <i class="bi bi-camera"></i>
+                </div>
+                <div class="camera-label">Take Photo</div>
+              </div>
+            </div>
+
+            <!-- Upload Area -->
+            <div class="upload-container">
+              <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">
+                  <i class="bi bi-cloud-arrow-up"></i>
+                </div>
+                <div class="upload-text">Click to upload or drag & drop</div>
+                <div class="upload-subtext">JPG, PNG files (Max 5MB)</div>
+                <input type="file" id="photoInput" name="photo" accept="image/*" class="file-input" />
+              </div>
+              
+              <!-- Camera Container -->
+              <div class="camera-container" id="cameraContainer">
+                <video id="cameraStream" class="camera-preview" autoplay playsinline></video>
+                <div class="camera-controls">
+                  <button type="button" id="captureBtn" class="btn btn-primary">
+                    <i class="bi bi-camera me-2"></i>Capture Photo
+                  </button>
+                  <button type="button" id="closeCamera" class="btn btn-outline-secondary">
+                    <i class="bi bi-x me-2"></i>Close
+                  </button>
+                </div>
+                <canvas id="captureCanvas" style="display:none;"></canvas>
+              </div>
+              
+              <div class="preview-container">
+                <img id="imagePreview" class="preview-image" alt="Preview" />
+              </div>
+            </div>
+
+            <!-- optional user id (for demo) -->
+            <div class="mb-3">
+              <label class="form-label">User ID (optional)</label>
+              <input id="userId" class="form-control" placeholder="Enter your user ID" />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 mt-auto">
+              <i class="bi bi-cloud-upload me-2"></i>Upload & Analyze
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div id="resultCard" class="result-box">
+          <div class="result-header">
+            <h5 class="mb-0" style="font-size: 1.1rem;">
+              <i class="bi bi-graph-up me-2"></i>Analysis Results
+            </h5>
+            <p class="text-muted mb-0 mt-1" style="font-size: 0.8rem;">Comprehensive skin analysis based on your photo</p>
+          </div>
+
+          <div class="image-preview-container">
+            <img src="" id="boundedPreview" class="image-preview" style="display: none;" />
+          </div>
+
+          <div id="resultsContent">
+            <!-- populated by JS -->
+          </div>
+
+          <div class="mt-auto pt-3 border-top">
+            <a id="viewHistory" href="#" class="btn btn-outline-secondary">
+              <i class="bi bi-clock-history me-2"></i>View Past Analyses
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Enhanced file upload functionality
+    const uploadArea = document.getElementById('uploadArea');
+    const photoInput = document.getElementById('photoInput');
+    const imagePreview = document.getElementById('imagePreview');
+    const uploadOption = document.getElementById('uploadOption');
+    const cameraOption = document.getElementById('cameraOption');
+    const cameraContainer = document.getElementById('cameraContainer');
+    const video = document.getElementById('cameraStream');
+    const captureBtn = document.getElementById('captureBtn');
+    const closeCamera = document.getElementById('closeCamera');
+    const canvas = document.getElementById('captureCanvas');
+
+    let currentMode = 'upload'; // 'upload' or 'camera'
+    let stream = null;
+
+    // Upload area click handler
+    uploadArea.addEventListener('click', () => {
+      if (currentMode === 'upload') {
+        photoInput.click();
+      }
+    });
+
+    // Drag and drop functionality
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('dragover');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('dragover');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('dragover');
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        handleFileSelect(files[0]);
+      }
+    });
+
+    // File input change handler
+    photoInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        handleFileSelect(e.target.files[0]);
+      }
+    });
+
+    // Camera option handler
+    cameraOption.addEventListener('click', async () => {
+      currentMode = 'camera';
+      uploadOption.classList.remove('active');
+      cameraOption.classList.add('active');
+      
+      // Hide upload area and show camera container
+      uploadArea.style.display = 'none';
+      cameraContainer.style.display = 'block';
+
+      try {
+        // Request access to the camera
+        stream = await navigator.mediaDevices.getUserMedia({ 
+          video: { 
+            facingMode: 'user', // Use front camera
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+          } 
+        });
+        video.srcObject = stream;
+      } catch (err) {
+        alert('Unable to access camera: ' + err.message);
+        // Fall back to upload mode if camera fails
+        switchToUploadMode();
+      }
+    });
+
+    // Upload option handler
+    uploadOption.addEventListener('click', () => {
+      switchToUploadMode();
+    });
+
+    // Capture button handler
+    captureBtn.addEventListener('click', () => {
+      if (!stream) return;
+      
+      const context = canvas.getContext('2d');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      // Convert to image blob
+      canvas.toBlob((blob) => {
+  const file = new File([blob], 'skin-capture.jpg', { type: 'image/jpeg' });
+  
+  // Assign file to input element so the form can read it
+  const dataTransfer = new DataTransfer();
+  dataTransfer.items.add(file);
+  photoInput.files = dataTransfer.files;
+
+  handleFileSelect(file); // Show preview etc.
+
+  // Stop camera and switch back to upload mode
+  stopCamera();
+  switchToUploadMode();
+}, 'image/jpeg', 0.9);
+
+    });
+
+    // Close camera handler
+    closeCamera.addEventListener('click', () => {
+      stopCamera();
+      switchToUploadMode();
+    });
+
+    function switchToUploadMode() {
+      currentMode = 'upload';
+      cameraOption.classList.remove('active');
+      uploadOption.classList.add('active');
+      cameraContainer.style.display = 'none';
+      uploadArea.style.display = 'block';
+      stopCamera();
+    }
+
+    function stopCamera() {
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        stream = null;
+      }
+    }
+
+    function handleFileSelect(file) {
+      if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          imagePreview.src = e.target.result;
+          imagePreview.style.display = 'block';
+          uploadArea.querySelector('.upload-text').textContent = 'File selected: ' + file.name;
+          uploadArea.querySelector('.upload-subtext').textContent = 'Click to change file';
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Original form submission logic
+    document.getElementById('photoForm').addEventListener('submit', async function(e){
+        e.preventDefault();
+        const fileInput = document.getElementById('photoInput');
+        if(!fileInput.files.length) return alert('Select a photo');
+
+        const fd = new FormData();
+        fd.append('photo', fileInput.files[0]);
+
+        const btn = e.target.querySelector('button');
+        btn.disabled = true; 
+        btn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Analyzing...';
+
+        try {
+            const res = await fetch("http://127.0.0.1:5000/api/upload_photo", { method:'POST', body: fd });
+            const data = await res.json();
+            if(!data.success){
+                alert('Error: ' + data.error);
+                btn.disabled = false; 
+                btn.innerHTML = '<i class="bi bi-cloud-upload me-2"></i>Upload & Analyze';
+                return;
+            }
+
+            const analysis = data.analysis;
+            
+            // More compact results display
+            document.getElementById('resultsContent').innerHTML = `
+              <div class="compact-grid">
+                <div class="compact-item">
+                  <div class="compact-value">${analysis.skin_type}</div>
+                  <div class="compact-label">Skin Type</div>
+                  <div class="confidence-badge mt-1">${(analysis.skin_type_confidence*100).toFixed(1)}%</div>
+                </div>
+                <div class="compact-item">
+                  <div class="compact-value">${analysis.acne_level}</div>
+                  <div class="compact-label">Acne Level</div>
+                  <div class="confidence-badge mt-1">${(analysis.acne_confidence*100).toFixed(1)}%</div>
+                </div>
+              </div>
+
+              <div class="analysis-section">
+                <h6><i class="bi bi-info-circle me-2"></i>Skin Details</h6>
+                <div class="analysis-item">
+                  <span class="analysis-label">Other Concerns</span>
+                  <span class="analysis-value">${analysis.other_problems}</span>
+                </div>
+              </div>
+
+              <div class="healing-timeline">
+                <div class="healing-item">
+                  <div class="healing-days">${analysis.natural_heal_days}</div>
+                  <div class="healing-label">Natural Healing</div>
+                </div>
+                <div class="healing-item">
+                  <div class="healing-days">${analysis.with_products_heal_days}</div>
+                  <div class="healing-label">With Products</div>
+                </div>
+              </div>
+
+              <div class="explanation-box">
+                <h6><i class="bi bi-chat-square-text me-2"></i>Expert Analysis</h6>
+                <p>${analysis.explanation.replace(/\n/g,'<br>')}</p>
+              </div>
+            `;
+
+            // Show bounded image
+            const imgPreview = document.getElementById('boundedPreview');
+            imgPreview.src = 'http://localhost:5000/uploads/' + analysis.bounded_image;
+
+            imgPreview.style.display = 'block';
+
+            document.getElementById('resultCard').style.display = 'block';
+
+        } catch(err){
+            console.error(err);
+            alert('Upload or analysis error');
+        } finally {
+            btn.disabled = false; 
+            btn.innerHTML = '<i class="bi bi-cloud-upload me-2"></i>Upload & Analyze';
+        }
+    });
+  </script>
+
+</body>
+</html>

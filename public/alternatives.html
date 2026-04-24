@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alternatives Suggestor - Skinverse</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    :root {
+      --dusty-rose: #cc8b86;
+      --cream: #f9eae1;
+      --burgundy: #7d4f50;
+      --beige: #d1be9c;
+      --taupe: #aa998f;
+      --light-bg: #f9eae1;
+      --card-bg: #ffffff;
+      --text-dark: #3a2e2e;
+      --text-light: #7a6a6a;
+      --shadow-soft: 0 8px 30px rgba(125, 79, 80, 0.08);
+      --shadow-medium: 0 15px 35px rgba(125, 79, 80, 0.12);
+    }
+    
+    body { 
+      background-color: var(--light-bg); 
+      font-family: 'Poppins', sans-serif; 
+      line-height: 1.6;
+    }
+    
+    .navbar {
+      background-color: var(--burgundy);
+      box-shadow: 0 4px 20px rgba(125, 79, 80, 0.2);
+      padding: 1rem 0;
+      border-bottom: 2px solid var(--dusty-rose);
+    }
+
+    .navbar-brand {
+      color: white !important;
+      font-weight: 600;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.3s ease;
+    }
+
+    .navbar-brand:hover {
+      transform: translateY(-2px);
+    }
+
+    .main-container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 0 15px;
+    }
+
+    .page-title {
+      color: var(--burgundy);
+      font-weight: 600;
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-subtitle {
+      color: var(--text-light);
+      font-size: 0.95rem;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(209, 190, 156, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-medium);
+    }
+
+    .search-section {
+      margin-bottom: 2rem;
+    }
+
+    .search-input-group {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-input {
+      flex: 1;
+      border-radius: 50px;
+      padding: 15px 25px;
+      border: 1.5px solid rgba(209, 190, 156, 0.3);
+      outline: none;
+      transition: all 0.3s;
+      font-size: 1rem;
+      background-color: var(--card-bg);
+    }
+
+    .search-input:focus {
+      border-color: var(--dusty-rose);
+      box-shadow: 0 0 0 0.2rem rgba(204, 139, 134, 0.15);
+    }
+
+    .search-btn {
+      border-radius: 50px;
+      background-color: var(--dusty-rose);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-weight: 500;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .search-btn:hover {
+      background-color: var(--burgundy);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(125, 79, 80, 0.2);
+    }
+
+    .saved-section {
+      margin-bottom: 2rem;
+    }
+
+    .section-label {
+      color: var(--burgundy);
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .saved-select {
+      width: 100%;
+      border-radius: 12px;
+      padding: 12px 20px;
+      border: 1.5px solid rgba(209, 190, 156, 0.3);
+      background-color: var(--card-bg);
+      color: var(--text-dark);
+      font-size: 0.95rem;
+      transition: all 0.3s;
+    }
+
+    .saved-select:focus {
+      border-color: var(--dusty-rose);
+      box-shadow: 0 0 0 0.2rem rgba(204, 139, 134, 0.15);
+    }
+
+    .results-container {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(209, 190, 156, 0.2);
+      min-height: 200px;
+      margin-top: 1.5rem;
+    }
+
+    .results-header {
+      border-bottom: 2px solid var(--beige);
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .results-title {
+      color: var(--burgundy);
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .results-subtitle {
+      color: var(--text-light);
+      font-size: 0.85rem;
+    }
+
+    .alternatives-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .alternative-card {
+      background: rgba(204, 139, 134, 0.05);
+      border-radius: 12px;
+      padding: 1.25rem;
+      border-left: 4px solid var(--dusty-rose);
+      transition: all 0.3s;
+    }
+
+    .alternative-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      background: rgba(204, 139, 134, 0.08);
+    }
+
+    .alternative-name {
+      font-weight: 600;
+      color: var(--burgundy);
+      margin-bottom: 0.75rem;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .alternative-benefits {
+      margin: 0;
+      padding-left: 1.2rem;
+    }
+
+    .alternative-benefits li {
+      margin-bottom: 0.4rem;
+      color: var(--text-dark);
+      font-size: 0.9rem;
+    }
+
+    .tip-box {
+      background: rgba(204, 139, 134, 0.05);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-top: 1.5rem;
+      border-left: 4px solid var(--beige);
+    }
+
+    .tip-title {
+      font-weight: 600;
+      color: var(--burgundy);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+    }
+
+    .tip-content {
+      color: var(--text-dark);
+      margin: 0;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .loading-spinner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(204, 139, 134, 0.3);
+      border-left: 4px solid var(--dusty-rose);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: var(--text-light);
+    }
+
+    .empty-icon {
+      font-size: 3rem;
+      color: var(--dusty-rose);
+      margin-bottom: 1rem;
+    }
+
+    .empty-text {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-subtext {
+      font-size: 0.85rem;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .main-container {
+        margin: 15px auto;
+      }
+      
+      .feature-card {
+        padding: 1.5rem;
+      }
+      
+      .search-input-group {
+        flex-direction: column;
+      }
+      
+      .alternatives-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .search-btn {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a class="navbar-brand" href="dashboard.html">
+        <i class="bi bi-droplet" style="font-size: 1.5rem;"></i>
+        Skinverse
+      </a>
+    </div>
+  </nav>
+
+  <div class="main-container">
+    <div class="mb-4">
+      <h1 class="page-title">
+        <i class="bi bi-arrow-left-right me-2"></i>Alternatives Suggestor
+      </h1>
+      <p class="page-subtitle">Discover safe, natural alternatives for skincare chemicals</p>
+    </div>
+
+    <div class="feature-card">
+      <!-- Search Section -->
+      <div class="search-section">
+        <div class="search-input-group">
+          <input type="text" id="chemInput" class="search-input" placeholder="Enter chemical name (e.g., salicylic acid, retinol)">
+          <button class="search-btn" onclick="getAlternatives()">
+            <i class="bi bi-search"></i> Find Alternatives
+          </button>
+        </div>
+      </div>
+
+      <!-- Saved Chemicals Section -->
+      <div class="saved-section">
+        <div class="section-label">
+          <i class="bi bi-collection"></i> Or select from saved chemicals:
+        </div>
+        <select id="savedChemicals" class="saved-select" onchange="displaySavedChemical()">
+          <option value="">-- Choose a chemical --</option>
+        </select>
+      </div>
+
+      <!-- Results Section -->
+      <div class="results-container">
+        <div class="results-header">
+          <h3 class="results-title"><i class="bi bi-lightbulb"></i> Alternative Suggestions</h3>
+          <p class="results-subtitle">Natural and safe alternatives for your skincare routine</p>
+        </div>
+        
+        <div id="altBox">
+          <div class="empty-state">
+            <div class="empty-icon">
+              <i class="bi bi-flower1"></i>
+            </div>
+            <p class="empty-text">Search for alternatives to get started</p>
+            <p class="empty-subtext">Enter a chemical name above or select from your saved chemicals</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function getAlternatives() {
+      const chem = document.getElementById('chemInput').value.trim();
+      if (!chem) return;
+
+      const altBox = document.getElementById('altBox');
+      altBox.innerHTML = `
+        <div class="loading-spinner">
+          <div class="spinner"></div>
+        </div>
+      `;
+
+      try {
+        // Fetch alternatives from SkinBot
+        const response = await fetch('/api/skinbot_query', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: `Give natural and safe alternatives for ${chem} in keywords only, comma separated.` })
+        });
+        const data = await response.json();
+        const alternatives = data.reply || 'No alternatives found.';
+        
+        // Format the response
+        displayFormattedAlternatives(chem, alternatives);
+
+        // Save to knowledge graph
+        await fetch('/api/add_chemical', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chemical: chem, alternatives })
+        });
+
+        // Reload dropdown
+        loadSavedChemicals();
+
+      } catch (err) {
+        altBox.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">
+              <i class="bi bi-exclamation-triangle"></i>
+            </div>
+            <p class="empty-text">Could not reach server</p>
+            <p class="empty-subtext">Please check your connection and try again</p>
+          </div>
+        `;
+      }
+    }
+
+    function displayFormattedAlternatives(chemical, alternativesText) {
+      const altBox = document.getElementById('altBox');
+      
+      // Parse the alternatives (assuming comma-separated)
+      const alternatives = alternativesText.split(',').map(alt => alt.trim()).filter(alt => alt);
+      
+      if (alternatives.length === 0 || alternatives[0] === 'No alternatives found.') {
+        altBox.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">
+              <i class="bi bi-search"></i>
+            </div>
+            <p class="empty-text">No alternatives found for "${chemical}"</p>
+            <p class="empty-subtext">Try searching for a different chemical or check the spelling</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Create formatted alternatives grid
+      let alternativesHTML = `
+        <div class="alternatives-grid">
+      `;
+      
+      alternatives.forEach(alternative => {
+        alternativesHTML += `
+          <div class="alternative-card">
+            <div class="alternative-name">
+              <i class="bi bi-check-circle"></i>${alternative}
+            </div>
+            <ul class="alternative-benefits">
+              <li>Natural alternative</li>
+              <li>Skin-friendly</li>
+              <li>Gentle formulation</li>
+            </ul>
+          </div>
+        `;
+      });
+      
+      alternativesHTML += `
+        </div>
+        <div class="tip-box">
+          <div class="tip-title">
+            <i class="bi bi-info-circle"></i> Important Note
+          </div>
+          <p class="tip-content">
+            Always patch test new products and consult with a dermatologist before making significant changes to your skincare routine. Individual skin types may react differently to various ingredients.
+          </p>
+        </div>
+      `;
+      
+      altBox.innerHTML = alternativesHTML;
+    }
+
+    async function loadSavedChemicals() {
+      try {
+        const res = await fetch('/api/knowledge_graph');
+        const kg = await res.json();
+        const select = document.getElementById('savedChemicals');
+        select.innerHTML = '<option value="">-- Choose a chemical --</option>';
+        kg.forEach(k => {
+          const opt = document.createElement('option');
+          opt.value = k.alternatives;
+          opt.text = k.chemical;
+          select.appendChild(opt);
+        });
+      } catch (err) {
+        console.error('Failed to load saved chemicals:', err);
+      }
+    }
+
+    function displaySavedChemical() {
+      const select = document.getElementById('savedChemicals');
+      const altBox = document.getElementById('altBox');
+      
+      if (!select.value) {
+        altBox.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">
+              <i class="bi bi-flower1"></i>
+            </div>
+            <p class="empty-text">Search for alternatives to get started</p>
+            <p class="empty-subtext">Enter a chemical name above or select from your saved chemicals</p>
+          </div>
+        `;
+        return;
+      }
+      
+      displayFormattedAlternatives(select.options[select.selectedIndex].text, select.value);
+    }
+
+    document.getElementById('chemInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') getAlternatives();
+    });
+
+    // Load saved chemicals on page load
+    loadSavedChemicals();
+  </script>
+</body>
+</html>

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skinverse Dashboard</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    :root {
+      --dusty-rose: #cc8b86;
+      --cream: #f9eae1;
+      --burgundy: #7d4f50;
+      --beige: #d1be9c;
+      --taupe: #aa998f;
+      --light-bg: #f9eae1;
+      --card-bg: #ffffff;
+      --text-dark: #3a2e2e;
+      --text-light: #7a6a6a;
+    }
+    
+    body {
+      background-color: var(--light-bg);
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .navbar {
+      background-color: var(--burgundy);
+      box-shadow: 0 2px 15px rgba(125, 79, 80, 0.15);
+      padding: 1rem 0;
+      border-bottom: 2px solid var(--dusty-rose);
+    }
+
+    .navbar-brand {
+      color: white !important;
+      font-weight: 600;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logout-btn {
+      background-color: var(--dusty-rose);
+      border: none;
+      color: white;
+      border-radius: 6px;
+      padding: 6px 18px;
+      font-weight: 500;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      background-color: var(--beige);
+      transform: translateY(-1px);
+      color: var(--text-dark);
+      box-shadow: 0 4px 12px rgba(125, 79, 80, 0.15);
+    }
+
+    .dashboard-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 25px;
+    }
+
+    .dashboard-header {
+      margin: 2.5rem 0 2rem;
+    }
+
+    .dashboard-title {
+      color: var(--burgundy);
+      font-weight: 600;
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .dashboard-subtitle {
+      color: var(--text-light);
+      font-size: 0.95rem;
+      font-weight: 400;
+    }
+
+    /* Main Layout */
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 2rem;
+      margin: 2rem 0 3rem;
+    }
+
+    /* Feature Grid */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(125, 79, 80, 0.08);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(209, 190, 156, 0.2);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(125, 79, 80, 0.12);
+      border-color: var(--beige);
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      color: var(--burgundy);
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover .feature-icon {
+      transform: scale(1.1);
+      color: var(--dusty-rose);
+    }
+
+    .feature-title {
+      color: var(--text-dark);
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      line-height: 1.3;
+    }
+
+    .feature-description {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+
+    .feature-btn {
+      background-color: var(--dusty-rose);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 20px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      width: 100%;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+    }
+
+    .feature-btn:hover {
+      background-color: var(--burgundy);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(125, 79, 80, 0.2);
+      color: white;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(125, 79, 80, 0.08);
+      border: 1px solid rgba(209, 190, 156, 0.2);
+    }
+
+    .sidebar-title {
+      color: var(--burgundy);
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--beige);
+    }
+
+    .quick-action {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 1rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: var(--text-dark);
+      margin-bottom: 0.75rem;
+    }
+
+    .quick-action:hover {
+      background-color: rgba(204, 139, 134, 0.1);
+      transform: translateX(5px);
+    }
+
+    .quick-action-icon {
+      font-size: 1.2rem;
+      color: var(--dusty-rose);
+      width: 24px;
+    }
+
+    .quick-action-text {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    /* Stats Section */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: 0 2px 15px rgba(125, 79, 80, 0.06);
+      border: 1px solid rgba(209, 190, 156, 0.1);
+    }
+
+    .stat-number {
+      color: var(--burgundy);
+      font-weight: 700;
+      font-size: 1.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+      color: var(--text-light);
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    @media (max-width: 1024px) {
+      .dashboard-layout {
+        grid-template-columns: 1fr;
+      }
+      
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-container {
+        padding: 0 15px;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .feature-card {
+        padding: 1.5rem;
+      }
+      
+      .sidebar {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center w-100">
+        <a class="navbar-brand" href="#">
+          <i class="bi bi-droplet" style="font-size: 1.5rem;"></i>
+          Skinverse
+        </a>
+        <a href="/logout" class="logout-btn">
+          <i class="bi bi-box-arrow-right me-1"></i>Logout
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dashboard Content -->
+  <div class="container dashboard-container">
+    <div class="dashboard-header">
+      <h1 class="dashboard-title">Dashboard</h1>
+      <p class="dashboard-subtitle">Welcome back! Here's your skincare overview</p>
+    </div>
+
+    <div class="dashboard-layout">
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- Feature Grid -->
+        <div class="feature-grid">
+          <!-- Skin Analysis -->
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-flower1"></i>
+            </div>
+            <h3 class="feature-title">Skin Analysis</h3>
+            <p class="feature-description">Get comprehensive insights about your skin type and receive personalized recommendations.</p>
+            <a href="/know_skin.html" class="feature-btn">Start Analysis</a>
+          </div>
+
+          <!-- AI Assistant -->
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-robot"></i>
+            </div>
+            <h3 class="feature-title">AI Assistant</h3>
+            <p class="feature-description">Chat with our intelligent assistant for real-time skincare advice and guidance.</p>
+            <a href="/skinbot.html" class="feature-btn">Chat Now</a>
+          </div>
+
+          <!-- Product Alternatives -->
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-arrow-left-right"></i>
+            </div>
+            <h3 class="feature-title">Product Finder</h3>
+            <p class="feature-description">Discover safe and effective alternatives tailored to your skin needs.</p>
+            <a href="/alternatives.html" class="feature-btn">Find Products</a>
+          </div>
+
+          <!-- Skincare Guide -->
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-list-check"></i>
+            </div>
+            <h3 class="feature-title">Routine Guide</h3>
+            <p class="feature-description">Follow professional step-by-step routines for optimal skincare results.</p>
+            <a href="/procedures.html" class="feature-btn">View Guide</a>
+          </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number">12</div>
+            <div class="stat-label">Products Used</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">28</div>
+            <div class="stat-label">Days Streak</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">94%</div>
+            <div class="stat-label">Skin Health</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <h3 class="sidebar-title">Quick Actions</h3>
+        
+        <a href="/personalised.html" class="quick-action">
+          <div class="quick-action-icon">
+            <i class="bi bi-star"></i>
+          </div>
+          <div class="quick-action-text">Get Recommendations</div>
+        </a>
+
+        <a href="/analysis.html" class="quick-action">
+          <div class="quick-action-icon">
+            <i class="bi bi-graph-up"></i>
+          </div>
+          <div class="quick-action-text">Track Progress</div>
+        </a>
+
+        <a href="/profile.html" class="quick-action">
+          <div class="quick-action-icon">
+            <i class="bi bi-person"></i>
+          </div>
+          <div class="quick-action-text">Update Profile</div>
+        </a>
+
+        <a href="/settings.html" class="quick-action">
+          <div class="quick-action-icon">
+            <i class="bi bi-gear"></i>
+          </div>
+          <div class="quick-action-text">Settings</div>
+        </a>
+
+        <a href="/help.html" class="quick-action">
+          <div class="quick-action-icon">
+            <i class="bi bi-question-circle"></i>
+          </div>
+          <div class="quick-action-text">Help Center</div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Add subtle animation to cards on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      const cards = document.querySelectorAll('.feature-card, .stat-card');
+      
+      cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(15px)';
+        
+        setTimeout(() => {
+          card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, 100 * index);
+      });
+    });
+  </script>
+</body>
+</html>
